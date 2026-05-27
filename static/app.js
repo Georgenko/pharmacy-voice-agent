@@ -1,22 +1,21 @@
 let mediaRecorder;
 let audioChunks = [];
 let conversationHistory = [];
+let recordingStart;
+let shouldProcess = false;
 
 async function startRecording() {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
   mediaRecorder = new MediaRecorder(stream);
   audioChunks = [];
-  mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-  mediaRecorder.start();
-  document.getElementById("status").textContent = "🔴 Recording...";
-}
+  recordingStart = Date.now();
+  shouldProcess = false;
 
-async function stopRecording() {
-  mediaRecorder.stop();
-  document.getElementById("status").textContent = "Processing...";
-  document.getElementById("btn").disabled = true;
+  mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
 
   mediaRecorder.onstop = async () => {
+    if (!shouldProcess) return;
+
     const blob = new Blob(audioChunks, { type: "audio/webm" });
     const formData = new FormData();
     formData.append("audio", blob, "audio.webm");
@@ -53,6 +52,23 @@ async function stopRecording() {
     document.getElementById("status").textContent = "Press and hold to speak";
     document.getElementById("btn").disabled = false;
   };
+
+  mediaRecorder.start();
+  document.getElementById("status").textContent = "🔴 Recording...";
+}
+
+async function stopRecording() {
+  const duration = Date.now() - recordingStart;
+  if (duration < 500) {  // ignore taps under 500ms
+    mediaRecorder.stop();
+    document.getElementById("status").textContent = "Hold longer to record.";
+    return;
+  }
+
+  shouldProcess = true;
+  document.getElementById("status").textContent = "Processing...";
+  document.getElementById("btn").disabled = true;
+  mediaRecorder.stop();
 }
 
 function clearHistory() {

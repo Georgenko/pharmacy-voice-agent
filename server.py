@@ -2,7 +2,7 @@ import os
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from groq import Groq
+from groq import Groq, BadRequestError
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -25,13 +25,16 @@ class ChatRequest(BaseModel):
 @app.post("/transcribe")
 async def transcribe(audio: UploadFile = File(...)):
     audio_bytes = await audio.read()
-    if len(audio_bytes) < 1000:  # ignore tiny/empty recordings
+    if len(audio_bytes) < 5000:  # ignore tiny/empty recordings
         return {"text": ""}
-    transcription = client.audio.transcriptions.create(
-        file=(audio.filename, audio_bytes, audio.content_type),
-        model="whisper-large-v3-turbo",
-    )
-    return {"text": transcription.text}
+    try:
+        transcription = client.audio.transcriptions.create(
+            file=(audio.filename, audio_bytes, audio.content_type),
+            model="whisper-large-v3-turbo",
+        )
+        return {"text": transcription.text}
+    except BadRequestError:
+        return {"text": ""}
 
 @app.post("/chat")
 async def chat(req: ChatRequest):
