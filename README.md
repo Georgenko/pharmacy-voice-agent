@@ -8,3 +8,8 @@ pharmacy-voice-agent/
 ├── server.py         ← tiny FastAPI app, one endpoint  
 ├── prompt.txt        ← your system prompt (versioned separately)  
 └── README.md         ← explain your decisions, not just setup  
+
+## Evaluate the prompt
+```
+pytest eval/ -v
+```
