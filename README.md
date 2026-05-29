@@ -2,7 +2,7 @@
 
 A voice assistant for a digital pharmacy platform. Talk to MediBot to get help with e-prescriptions, medication ordering, pharmacy pickup and delivery, finding pharmacies or doctors, and general medication information.
 
-> Voice interface powered by a Whisper (STT) → LLaMA (LLM) → Whisper (TTS) pipeline via Groq.
+> Voice interface powered by a Whisper (STT) → LLaMA (LLM) → Browser SpeechSynthesis (TTS) pipeline via Groq.
 
 ---
 

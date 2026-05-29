@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from groq import Groq, BadRequestError
 from pydantic import BaseModel
 
-from constants import TEXT_MODEL
+from constants import TEXT_MODEL, STT_MODEL
 
 app = FastAPI()
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
@@ -32,7 +32,7 @@ async def transcribe(audio: UploadFile = File(...)):
     try:
         transcription = client.audio.transcriptions.create(
             file=(audio.filename, audio_bytes, audio.content_type),
-            model="whisper-large-v3-turbo",
+            model=STT_MODEL,
         )
         return {"text": transcription.text}
     except BadRequestError:
