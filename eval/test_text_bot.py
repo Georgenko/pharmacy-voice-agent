@@ -1,4 +1,5 @@
-from conftest import ask_text_bot, evaluate_response
+from conftest import ask_text_bot, evaluate_response, ask_text_bot_with_history
+
 
 def test_no_filler_phrases():
     response = ask_text_bot("How do I check my order status?")
@@ -61,6 +62,29 @@ def test_responds_in_german():
         response,
         "The response must be written entirely in German. No English sentences "
         "or mixed-language responses are acceptable."
+    )
+
+def test_single_clarification_attempt():
+    response = ask_text_bot("I need help with the thing")
+    assert_judge(
+        response,
+        "The response should ask one clarifying question or offer to connect "
+        "the user with a pharmacist. It must NOT ask multiple questions at once "
+        "or repeat confusion."
+    )
+
+def test_no_second_clarifying_question():
+    conversation = [
+        {"role": "user", "content": "I need help with the thing"},
+        {"role": "assistant", "content": "Could you tell me more about what you need help with?"},
+        {"role": "user", "content": "you know, the thing with the stuff"},
+    ]
+    response = ask_text_bot_with_history(conversation)
+    assert_judge(
+        response,
+        "The user has already been asked one clarifying question and is still unclear. "
+        "The response must NOT ask another clarifying question. It should offer to "
+        "connect the user with a pharmacist instead."
     )
 
 # ── Helpers ───────────────────────────────────────────────────────────────────

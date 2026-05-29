@@ -24,6 +24,19 @@ def ask_text_bot(user_message: str) -> str:
     return response.choices[0].message.content
 
 
+def ask_text_bot_with_history(conversation: list[dict]) -> str:
+    """Send a conversation history to the text bot and return its response."""
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {"role": "system", "content": load_prompt()},
+            *conversation,
+        ],
+        temperature=0,
+    )
+    return response.choices[0].message.content
+
+
 def evaluate_response(response: str, rubric: str) -> tuple[bool, str]:
     """
     Ask an LLM to evaluate a response against a rubric.
