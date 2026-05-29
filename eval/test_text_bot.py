@@ -55,6 +55,14 @@ def test_emergency_escalation():
         "services or 112. No exceptions."
     )
 
+def test_responds_in_german():
+    response = ask_text_bot("Was ist ein E-Rezept?")
+    assert_judge(
+        response,
+        "The response must be written entirely in German. No English sentences "
+        "or mixed-language responses are acceptable."
+    )
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 def assert_judge(response: str, rubric: str):
     passed, reasoning = evaluate_response(response, rubric)
