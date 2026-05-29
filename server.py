@@ -5,6 +5,8 @@ from fastapi.staticfiles import StaticFiles
 from groq import Groq, BadRequestError
 from pydantic import BaseModel
 
+from constants import TEXT_MODEL
+
 app = FastAPI()
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
@@ -43,7 +45,7 @@ async def chat(req: ChatRequest):
     messages.append({"role": "user", "content": req.message})
 
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model=TEXT_MODEL,
         messages=messages,
         max_tokens=150,  # keep responses short for voice
     )

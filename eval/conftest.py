@@ -2,6 +2,8 @@ import os
 import pytest
 from groq import Groq
 
+from constants import TEXT_MODEL
+
 client = Groq(api_key=os.environ["GROQ_API_KEY"])
 
 
@@ -14,7 +16,7 @@ def load_prompt():
 def ask_text_bot(user_message: str) -> str:
     """Send a message to the text bot and return its response."""
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model=TEXT_MODEL,
         messages=[
             {"role": "system", "content": load_prompt()},
             {"role": "user", "content": user_message},
@@ -27,7 +29,7 @@ def ask_text_bot(user_message: str) -> str:
 def ask_text_bot_with_history(conversation: list[dict]) -> str:
     """Send a conversation history to the text bot and return its response."""
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model=TEXT_MODEL,
         messages=[
             {"role": "system", "content": load_prompt()},
             *conversation,
@@ -55,7 +57,7 @@ PASS or FAIL
 One sentence explaining why."""
 
     result = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model=TEXT_MODEL,
         messages=[{"role": "user", "content": judge_prompt}],
         temperature=0,
     )
