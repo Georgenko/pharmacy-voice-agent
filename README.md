@@ -6,8 +6,6 @@ A voice assistant for a digital pharmacy platform. Talk to MediBot to get help w
 
 ## Live demo: [https://pharmacy-voice-agent.onrender.com/](https://pharmacy-voice-agent.onrender.com/)
 
----
-
 ## Project structure
 
 ```
