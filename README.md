@@ -4,7 +4,7 @@ A voice assistant for a digital pharmacy platform. Talk to MediBot to get help w
 
 > Voice interface powered by a Whisper (STT) → LLaMA (LLM) → Browser SpeechSynthesis (TTS) pipeline via Groq.
 
-## Live demo: [https://pharmacy-voice-agent.onrender.com/](https://pharmacy-voice-agent.onrender.com/)
+## Live demo: [https://pharmacy-voice-agent.onrender.com/](https://pharmacy-voice-agent.onrender.com/) Note: Use Google Chrome for a better sounding assistant.
 
 ## Project structure
 
